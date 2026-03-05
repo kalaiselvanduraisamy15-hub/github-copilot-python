@@ -333,6 +333,7 @@ window.addEventListener('load', async () => {
   applySavedTheme();
 
   document.getElementById('new-game').addEventListener('click', newGame);
+  document.getElementById('difficulty').addEventListener('change', newGame);
   document.getElementById('check-solution').addEventListener('click', checkSolution);
   document.getElementById('check-puzzle').addEventListener('click', checkPuzzle);
   document.getElementById('hint-btn').addEventListener('click', requestHint);

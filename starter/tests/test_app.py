@@ -6,6 +6,7 @@ import pytest
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 import app as sudoku_app
+import sudoku_logic
 
 
 @pytest.fixture
@@ -33,6 +34,16 @@ def test_new_game_returns_board_and_difficulty(client):
     assert payload["difficulty"] == "hard"
     assert len(payload["puzzle"]) == 9
     assert all(len(row) == 9 for row in payload["puzzle"])
+
+
+@pytest.mark.parametrize("difficulty", ["easy", "medium", "hard"])
+def test_generated_puzzle_has_unique_solution(client, difficulty):
+    response = client.get(f"/new?difficulty={difficulty}")
+    assert response.status_code == 200
+
+    puzzle = response.get_json()["puzzle"]
+    count = sudoku_logic.count_solutions(sudoku_logic.deep_copy(puzzle), limit=2)
+    assert count == 1
 
 
 def test_check_fails_without_game(client):
